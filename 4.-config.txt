@@ -1,0 +1,29 @@
+4.- [config.py]
+
+Agregar la siguente configuraci para la conexion a la base de datos:
+
+
+from pydantic import BaseSettings
+
+
+class Settings(BaseSettings):
+
+    DATABASE_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DATABASE}"
+
+    class Config():
+        env_file = ".env"
+
+settings = Settings()     
+
+define una clase llamada Settings que hereda de BaseSettings, una clase especializada de Pydantic. 
+Esta clase está diseñada para cargar variables de entorno automáticamente en una aplicación.
+
+    DATABASE_URL: Esta variable construye la cadena de conexión a una base de datos PostgreSQL. 
+    Utiliza variables que se esperan que estén definidas en un archivo de entorno (como POSTGRES_USER, POSTGRES_PASSWORD, etc.).
+
+    class Config: Esta clase anidada es una convención de Pydantic. 
+    Le indica a BaseSettings que lea las variables de un archivo llamado .env que debería estar en la misma carpeta que el código.
+
+    settings = Settings(): Esta línea crea una instancia de la clase Settings. 
+    Al hacer esto, Pydantic lee el archivo .env, asigna los valores de las variables a los atributos de la clase y construye 
+    la DATABASE_URL completa. 

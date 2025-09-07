@@ -1,0 +1,37 @@
+3 [Crar archivo schemas.py]
+
+define modelos de datos para una API utilizando la biblioteca SQLModel, se centra en los esquemas de datos que se usarán para la validación 
+de la información de entrada y para la estructura de las respuestas que envía la API.
+
+Descripción de los Modelos Base
+
+Usa un patrón de herencia para reutilizar la lógica y evitar la repetición de código. 
+
+Los modelos con el sufijo Base actúan como la plantilla fundamental para los datos de cada objeto.
+
+    CategoryBase: Define los atributos básicos de una categoría, que en este caso es solo su name.
+
+    UserBase: 
+
+    ReviewBase: Contiene los campos básicos de una reseña: el text y la rating.
+
+    ProductBase: Define los atributos esenciales de un producto: el name, la description y el price.
+
+Modelos para la Creación y Lectura (CRUD)
+
+    Modelos Create: Se usan para validar la información que llega a la API cuando se crea un nuevo objeto.
+
+        CategoryCreate y ReviewCreate: heredan de sus modelos base, pero ReviewCreate incluye un product_id que es necesario al crear una reseña, 
+                                       ya que la conecta con un producto específico.
+
+        ProductCreate incluye el category_id, un campo necesario para asignar el producto a una categoría al momento de su creación.
+
+    Modelos Public: Definen la estructura de la respuesta que la API enviará al cliente.
+
+        CategoryPublic y ReviewPublic: añaden el id, un campo que se genera automáticamente en la base de datos y que es importante incluir 
+                                       en las respuestas para identificar los objetos.
+
+        ProductPublic: incluye las relaciones. No solo tiene el id del producto, sino que también contiene 
+                       el objeto completo de la categoría (category: CategoryPublic) 
+                       y una lista de las reseñas asociadas (reviews: List[ReviewPublic]). 
+                       Esto permite que la API envíe toda la información relevante de un producto en una sola respuesta.

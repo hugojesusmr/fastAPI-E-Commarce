@@ -1,0 +1,69 @@
+5.- [Crear Archivo db/session.py]
+
+ configurar una conexión asíncrona a la base de datos usando SQLAlchemy con PostgreSQL
+
+from curses import echo
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.orm import sessionmaker
+from app.core.config import settings
+
+engine = create_async_engine(settings.DATABASE_URL, echo=True)
+
+AsyncSessionFactory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+
+async def get_session():
+
+async with AsyncSessionFactory() as session:
+
+try:
+
+yield session
+
+await session.commit()
+
+except Exception:
+
+await session.rollback()
+
+finally:
+
+await session.close() 
+ Componentes Clave
+
+    create_async_engine: Esta función de sqlalchemy.ext.asyncio inicializa un motor de base de datos asíncrono.
+
+        settings.DATABASE_URL: Esto probablemente proviene de un módulo de configuración (por ejemplo, app.core.config) y contiene la cadena de conexión para su base de datos (por ejemplo, postgresql+asyncpg://usuario:contraseña@host/nombre_bd).
+
+        echo=True: Cuando se establece en True, SQLAlchemy registrará todas las sentencias SQL generadas en la consola, lo cual es muy útil para depurar y comprender lo que su aplicación está haciendo con la base de datos.
+
+    sessionmaker: Esta es una fábrica para crear objetos Session.
+
+        engine: El motor asíncrono creado anteriormente.
+
+        class_=AsyncSession: Especifica que las sesiones creadas por esta fábrica serán sesiones asíncronas, lo que le permitirá usar await con operaciones de base de datos.
+
+        expire_on_commit=False: Esta configuración evita que SQLAlchemy caduque (actualice) todos los objetos después de un commit. Esto significa que los objetos cargados antes de un commit permanecen en un estado utilizable en la sesión sin necesidad de ser recargados, lo que puede ser útil en ciertos patrones de aplicación.
+
+    AsyncSessionFactory: Una instancia de sessionmaker configurada para operaciones asíncronas. Esta fábrica se utiliza para producir objetos AsyncSession.
+
+Generador Asíncrono get_session()
+
+Esta es una función de inyección de dependencias diseñada para proporcionar una sesión de base de datos asíncrona a otras partes de su aplicación (por ejemplo, manejadores de rutas de FastAPI).
+
+    async with AsyncSessionFactory() as session:: Esta línea adquiere una AsyncSession de la fábrica. La declaración async with asegura que la sesión se cierre correctamente incluso si ocurren errores.
+
+    try...except...finally: Este bloque maneja el ciclo de vida de la transacción de la base de datos:
+
+        yield session: Este es el núcleo del generador. Proporciona el objeto session al llamador (por ejemplo, un endpoint de FastAPI). El llamador ejecutará sus operaciones de base de datos usando esta session.
+
+        await session.commit(): Si las operaciones realizadas por el llamador son exitosas, esta línea confirma la transacción, guardando los cambios en la base de datos.
+
+        except Exception:: Si ocurre algún error durante las operaciones de base de datos del llamador, se activa este bloque.
+
+        await session.rollback(): En caso de error, esta línea revierte la transacción, deshaciendo cualquier cambio realizado dentro de esa sesión para mantener la integridad de los datos.
+
+        finally:: Este bloque siempre se ejecuta, independientemente de si ocurrió una excepción o no.
+
+        await session.close(): Esto asegura que la sesión de la base de datos se cierre correctamente, liberando sus recursos.

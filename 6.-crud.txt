@@ -1,0 +1,7 @@
+6 [carpeta crud]
+ -> dentro de la carpeta crud crearemos las funcinalidades crear, eliminar, actualizar, leer, esto se crea separado
+ para que las apis manden llamar los crud, y sea modular. 
+
+ crear los sig. archivos product.py, category.py, user.py, review.py
+
+ 
