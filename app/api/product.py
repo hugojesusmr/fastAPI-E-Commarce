@@ -10,10 +10,10 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 # Importamos nuestra función para obtener la sesión de la base de datos.
 from app.db.session import get_session
 # Importamos las funciones CRUD (Crear, Leer, Actualizar, Borrar) para el producto.
-from crud import product
+from app.crud import product
 # Importamos los modelos de datos (schemas) que definen la estructura de los
 # productos para la creación y la respuesta pública.
-from schemas import ProductCreate, ProductPublic
+from app.schemas.schemas import ProductCreate, ProductPublic
 
 # Creamos una instancia de APIRouter. Esto nos permite modularizar nuestras rutas.
 # Todas las rutas definidas en este archivo se agruparán bajo un prefijo, si se especifica en el main.py

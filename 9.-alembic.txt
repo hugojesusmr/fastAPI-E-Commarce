@@ -5,7 +5,7 @@
  -> alembic init -t async alembic
 
 3.- Configurar alembic.ini y agregar la ruta de conexion a la bd
-  -> sqlalchemy.url = postgresql+asyncpg://admin:password@localhost:5432/mydb
+  -> sqlalchemy.url = postgresql+asyncpg://root:@localhost:26257/mydb
 
 4.- Entar el la carpeta alembic y editar el archivo env.py y agregar la siguiente lineas
    -> from models.models import SQLModel
@@ -13,13 +13,14 @@
 
 5.- [Realizar Migraciones]
     Navegar dentro de la carpeta app
+     * Generar la migración para crear el script de migración en la carpeta versions.
+     -> alembic revision --autogenerate -m "Create initial, user, product, category, review"
   
-  -> alembic upgrade head
-  -> Si ocurre error agregar en el archivo de versiones que se genera
-     -> import sqlmodel
+     * Si ocurre error agregar en el archivo de versiones que se genera
+        -> import sqlmodel
 
-6.- Commit de alembic
-  -> alembic revision --autoupgrade -m  "Create initial, user, product, category, review"  
+6.- Aplicar la migración: 
+  -> alembic upgrade head  
 
 
 

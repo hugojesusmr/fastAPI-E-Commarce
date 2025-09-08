@@ -1,4 +1,4 @@
-[router_product]
+[product]
   -> Crear el archivo api/product.py
 
 

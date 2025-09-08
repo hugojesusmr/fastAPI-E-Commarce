@@ -2,8 +2,8 @@ from typing import List
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from models.models import Product
-from schemas import ProductCreate
+from app.models.models import Product
+from app.schemas.schemas import ProductCreate
 
 
 async def create_product(product_data: ProductCreate, session: AsyncSession) -> Product:

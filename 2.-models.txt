@@ -1,7 +1,7 @@
 [--- Carpeta Models ---]
 
 1.- [Instalar dependencias]
-  -> pip intall sqlalchesmy sqlmodel[async] asyncpg asyncpg-stubs psycopg2-binary
+  -> pip intall SQLAlchemy sqlmodel[async] asyncpg asyncpg-stubs psycopg2-binary
 
 2.- [Crear archivo models.py]
   -> touch models.py
